@@ -1,4 +1,4 @@
-package org.luddang.Module.BaseModule;
+package org.luddang.Module.Base;
 
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;

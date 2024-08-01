@@ -15,8 +15,8 @@ import org.luddang.Data.TaskData;
 import org.luddang.Data.TickData;
 import org.luddang.Event.EventManager;
 import org.luddang.Message.BaseMessage;
-import org.luddang.Module.BaseModule.ConfigModule;
-import org.luddang.Module.BaseModule.TaskModule;
+import org.luddang.Module.Base.ConfigModule;
+import org.luddang.Module.Base.TaskModule;
 import org.luddang.Timer.MoneyTimer;
 
 import java.util.logging.Logger;

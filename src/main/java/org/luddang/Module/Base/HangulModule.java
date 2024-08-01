@@ -1,4 +1,4 @@
-package org.luddang.Module.BaseModule;
+package org.luddang.Module.Base;
 
 // Josa 를 붙이기 위함
 public class HangulModule {

@@ -1,4 +1,4 @@
-package org.luddang.Module.BaseModule;
+package org.luddang.Module.Base;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;

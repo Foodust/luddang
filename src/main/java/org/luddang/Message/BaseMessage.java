@@ -28,6 +28,9 @@ public enum BaseMessage {
     INFO_SET_MONEY("<aqua>돈이 설정되었습니다.</aqua>"),
     INFO_ADD_REGION("<aqua>지역이 설정되었습니다.</aqua>"),
 
+    INFO_ENTER_REGION("<yellow>영역에 입장하였습니다.</yellow>"),
+    INFO_QUIT_REGION("<red>영역에서 퇴장했습니다.</red>"),
+
     // 기본
     DEFAULT("기본"),
         // Error

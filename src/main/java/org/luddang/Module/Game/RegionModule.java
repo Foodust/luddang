@@ -1,16 +1,17 @@
 package org.luddang.Module.Game;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.luddang.Data.RegionData;
 import org.luddang.Data.info.RegionInfo;
 import org.luddang.Luddang;
 import org.luddang.Message.BaseMessage;
-import org.luddang.Module.BaseModule.ConfigModule;
-import org.luddang.Module.BaseModule.MessageModule;
+import org.luddang.Module.Base.ConfigModule;
+import org.luddang.Module.Base.MessageModule;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class RegionModule {
 
@@ -42,9 +43,37 @@ public class RegionModule {
     public void isRegion(PlayerMoveEvent event) {
         if (RegionData.regionData.isEmpty()) return;
 
-        RegionData.regionData.entrySet().forEach((entry) -> {
-            String key = entry.getKey();
-            RegionInfo value = entry.getValue();
-        });
+        Player player = event.getPlayer();
+        Location playerLocaction = player.getLocation();
+
+        for (Map.Entry<String, RegionInfo> entry : RegionData.regionData.entrySet()) {
+            String regionName = entry.getKey();
+            RegionInfo regionInfo = entry.getValue();
+
+            double x1 = Math.min(regionInfo.getX1(), regionInfo.getX2());
+            double y1 = Math.min(regionInfo.getY1(), regionInfo.getY2());
+            double z1 = Math.min(regionInfo.getZ1(), regionInfo.getZ2());
+            double x2 = Math.max(regionInfo.getX1(), regionInfo.getX2());
+            double y2 = Math.max(regionInfo.getY1(), regionInfo.getY2());
+            double z2 = Math.max(regionInfo.getZ1(), regionInfo.getZ2());
+
+            if (isInside(playerLocaction, x1, y1, z1, x2, y2, z2)) {
+                Set<String> regions = RegionData.nowRegion.computeIfAbsent(player, k -> new HashSet<>());
+                if (regions.isEmpty()) {
+                    messageModule.sendPlayerC(player, regionName + BaseMessage.INFO_ENTER_REGION.getMessage());
+                }
+                regions.add(regionName);
+            } else if (RegionData.nowRegion.get(player).contains(regionName)) {
+                RegionData.nowRegion.get(player).remove(regionName);
+                messageModule.sendPlayerC(player, regionName + BaseMessage.INFO_QUIT_REGION.getMessage());
+            }
+        }
+    }
+
+    private Boolean isInside(Location location, double x1, double y1, double z1, double x2, double y2, double z2) {
+        double x = location.getX();
+        double y = location.getY();
+        double z = location.getZ();
+        return x >= x1 && x <= x2 && y >= y1 && y <= y2 && z >= z1 && z <= z2;
     }
 }

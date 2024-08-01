@@ -1,4 +1,4 @@
-package org.luddang.Module.BaseModule;
+package org.luddang.Module.Base;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;

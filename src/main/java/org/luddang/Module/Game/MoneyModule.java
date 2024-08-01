@@ -5,10 +5,12 @@ import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.luddang.Data.PlayerData;
 import org.luddang.Luddang;
 import org.luddang.Message.BaseMessage;
-import org.luddang.Module.BaseModule.ConfigModule;
-import org.luddang.Module.BaseModule.MessageModule;
+import org.luddang.Module.Base.ConfigModule;
+import org.luddang.Module.Base.MessageModule;
 
 import java.util.UUID;
 
@@ -44,7 +46,7 @@ public class MoneyModule {
         configModule.addMoney(player.getUniqueId().toString(), moneyValue);
         configModule.reloadMoney();
         sendMoney(player, moneyValue);
-        messageModule.sendPlayerC(sender,BaseMessage.INFO_SET_MONEY.getMessage());
+        messageModule.sendPlayerC(sender, BaseMessage.INFO_SET_MONEY.getMessage());
     }
 
     public void sendMoney(Player player, Long money) {
@@ -53,5 +55,13 @@ public class MoneyModule {
         out.writeUTF(player.getName());
         out.writeLong(money);
         player.sendPluginMessage(plugin, BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
+    }
+
+    public void isJoining(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        UUID playerUUID = player.getUniqueId();
+        if (!PlayerData.playerInfo.containsKey(playerUUID)) return;
+        Long moneyValue = PlayerData.playerInfo.get(playerUUID);
+        sendMoney(player, moneyValue);
     }
 }

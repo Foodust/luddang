@@ -43,6 +43,7 @@ public class RegionModule {
     public void isRegion(PlayerMoveEvent event) {
         if (RegionData.regionData.isEmpty()) return;
 
+
         Player player = event.getPlayer();
         Location playerLocation = player.getLocation();
 
@@ -63,7 +64,7 @@ public class RegionModule {
                     messageModule.sendPlayerC(player, regionName + BaseMessage.INFO_ENTER_REGION.getMessage());
                 }
                 regions.add(regionName);
-            } else if (RegionData.nowRegion.get(player).contains(regionName)) {
+            } else if (RegionData.nowRegion.containsKey(player) && RegionData.nowRegion.get(player).contains(regionName)) {
                 RegionData.nowRegion.get(player).remove(regionName);
                 messageModule.sendPlayerC(player, regionName + BaseMessage.INFO_QUIT_REGION.getMessage());
             }
@@ -74,6 +75,8 @@ public class RegionModule {
         double x = location.getX();
         double y = location.getY();
         double z = location.getZ();
-        return x >= x1 && x <= x2 && y >= y1 && y <= y2 && z >= z1 && z <= z2;
+        return x >= x1 && x <= x2
+                && y >= y1 && y <= y2
+                && z >= z1 && z <= z2;
     }
 }

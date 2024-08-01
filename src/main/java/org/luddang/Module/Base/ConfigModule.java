@@ -95,7 +95,7 @@ public class ConfigModule {
             FileConfiguration config = getConfig(regionYml);
             String regionName = regionYml.getName().replace(".yml", "");
             List<Double> doubleList = config.getDoubleList(region);
-            if (doubleList.size() < 6) {
+            if (doubleList.size() < 5) {
                 messageModule.logInfo(BaseMessage.ERROR_CONFIG.getMessage());
                 continue;
             }

@@ -50,16 +50,23 @@ public class MoneyModule {
     }
 
     public void sendMoney(Player player, Long money) {
+
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF(player.getUniqueId().toString());
         out.writeUTF(player.getName());
         out.writeLong(money);
+        messageModule.broadcastMessage(player.getListeningPluginChannels().toString());
+        messageModule.broadcastMessage(plugin.getPluginListener().getChannel().toString());
+
         player.sendPluginMessage(plugin, BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
+        messageModule.logInfo(player.getName() + money);
     }
 
     public void isJoining(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
+
+
         if (!PlayerData.playerInfo.containsKey(playerUUID)) return;
         Long moneyValue = PlayerData.playerInfo.get(playerUUID);
         sendMoney(player, moneyValue);

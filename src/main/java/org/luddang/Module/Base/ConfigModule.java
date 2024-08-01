@@ -96,6 +96,7 @@ public class ConfigModule {
             String regionName = regionYml.getName().replace(".yml", "");
             List<Double> doubleList = config.getDoubleList(region);
             if (doubleList.size() < 6) {
+                messageModule.logInfo(BaseMessage.ERROR_CONFIG.getMessage());
                 continue;
             }
             RegionInfo regionInfo = RegionInfo.builder()

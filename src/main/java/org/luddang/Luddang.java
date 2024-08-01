@@ -52,9 +52,9 @@ public final class Luddang extends JavaPlugin {
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, BaseMessage.CHANNEL_NAME.getMessage());
         pluginListener = this.getServer().getMessenger().registerIncomingPluginChannel(this, BaseMessage.CHANNEL_NAME.getMessage(), new PacketMessageListener(this));
-
-        TaskData.tasks.add(new TaskModule(this).runBukkitTaskTimer(new MoneyTimer(this), 0L, 60 * TickData.longTick));
-        TaskData.tasks.add(new TaskModule(this).runBukkitTaskTimer(new RegionMessageTimer(this), 0L, TickData.longTick / 2));
+        TaskModule taskModule = new TaskModule(this);
+        TaskData.tasks.add(taskModule.runBukkitTaskTimer(new MoneyTimer(this), 0L, 60 * TickData.longTick));
+        TaskData.tasks.add(taskModule.runBukkitTaskTimer(new RegionMessageTimer(this), 0L, TickData.longTick / 2));
     }
 
     @Override

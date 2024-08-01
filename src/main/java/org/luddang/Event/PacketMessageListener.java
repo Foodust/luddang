@@ -17,7 +17,7 @@ public class PacketMessageListener implements PluginMessageListener {
     }
 
     @Override
-    public void onPluginMessageReceived(@NotNull String string, @NotNull Player player, @NotNull byte[] bytes) {
+    public void onPluginMessageReceived(@NotNull String string, @NotNull Player player, byte @NotNull [] bytes) {
         messageModule.broadcastMessage(string);
         messageModule.broadcastMessage(player.getName());
         messageModule.broadcastMessage(Arrays.toString(bytes));

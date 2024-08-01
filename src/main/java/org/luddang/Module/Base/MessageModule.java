@@ -198,6 +198,7 @@ public class MessageModule {
         for (String string : arg) {
             temp.append(" ").append(string);
         }
+        temp.deleteCharAt(0);
         return temp.toString();
     }
 }

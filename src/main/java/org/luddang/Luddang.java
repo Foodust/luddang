@@ -14,19 +14,22 @@ import org.luddang.Command.CommandManager;
 import org.luddang.Data.TaskData;
 import org.luddang.Data.TickData;
 import org.luddang.Event.EventManager;
+import org.luddang.Event.PacketMessageListener;
 import org.luddang.Message.BaseMessage;
 import org.luddang.Module.Base.ConfigModule;
 import org.luddang.Module.Base.TaskModule;
+import org.luddang.Timer.RegionMessageTimer;
 import org.luddang.Timer.MoneyTimer;
 
 import java.util.logging.Logger;
 
 @Getter
-public final class Luddang extends JavaPlugin implements PluginMessageListener {
+public final class Luddang extends JavaPlugin {
     private BukkitAudiences adventure;
     private PluginMessageListenerRegistration pluginListener;
     private Plugin plugin;
     private Logger log;
+    private ConfigModule configModule;
 
     public @NonNull BukkitAudiences getAdventure() {
         if (this.adventure == null) {
@@ -41,14 +44,17 @@ public final class Luddang extends JavaPlugin implements PluginMessageListener {
         this.log = Bukkit.getLogger();
         this.adventure = BukkitAudiences.create(this);
         this.plugin = this;
+        this.configModule = new ConfigModule(this);
         CommandManager commandManager = new CommandManager(this);
         EventManager eventManager = new EventManager(this.getServer(), this);
-        new ConfigModule(this).reloadMoney();
+
+        configModule.initialize();
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, BaseMessage.CHANNEL_NAME.getMessage());
-        pluginListener = this.getServer().getMessenger().registerIncomingPluginChannel(this, BaseMessage.CHANNEL_NAME.getMessage(), this);
+        pluginListener = this.getServer().getMessenger().registerIncomingPluginChannel(this, BaseMessage.CHANNEL_NAME.getMessage(), new PacketMessageListener(this));
 
         TaskData.tasks.add(new TaskModule(this).runBukkitTaskTimer(new MoneyTimer(this), 0L, 60 * TickData.longTick));
+        TaskData.tasks.add(new TaskModule(this).runBukkitTaskTimer(new RegionMessageTimer(this), 0L, TickData.longTick / 2));
     }
 
     @Override
@@ -59,12 +65,7 @@ public final class Luddang extends JavaPlugin implements PluginMessageListener {
             this.adventure.close();
             this.adventure = null;
         }
-        TaskData.release();
+        configModule.release();
         pluginListener = null;
-    }
-
-    @Override
-    public void onPluginMessageReceived(@NotNull String s, @NotNull Player player, @NotNull byte[] bytes) {
-
     }
 }

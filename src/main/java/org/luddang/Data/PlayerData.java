@@ -5,5 +5,7 @@ import java.util.UUID;
 
 public class PlayerData {
     public static HashMap<UUID, Long> playerInfo = new HashMap<>();
-
+    public static void release(){
+        playerInfo.clear();
+    }
 }

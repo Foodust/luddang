@@ -5,15 +5,14 @@ import org.luddang.Data.RegionData;
 import org.luddang.Luddang;
 import org.luddang.Module.Base.MessageModule;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimerTask;
 
-public class ActionBarTimer extends TimerTask {
+public class RegionMessageTimer extends TimerTask {
     private final MessageModule messageModule;
 
-    public ActionBarTimer(Luddang plugin) {
+    public RegionMessageTimer(Luddang plugin) {
         this.messageModule = new MessageModule(plugin);
     }
 

@@ -44,7 +44,7 @@ public class RegionModule {
         if (RegionData.regionData.isEmpty()) return;
 
         Player player = event.getPlayer();
-        Location playerLocaction = player.getLocation();
+        Location playerLocation = player.getLocation();
 
         for (Map.Entry<String, RegionInfo> entry : RegionData.regionData.entrySet()) {
             String regionName = entry.getKey();
@@ -57,7 +57,7 @@ public class RegionModule {
             double y2 = Math.max(regionInfo.getY1(), regionInfo.getY2());
             double z2 = Math.max(regionInfo.getZ1(), regionInfo.getZ2());
 
-            if (isInside(playerLocaction, x1, y1, z1, x2, y2, z2)) {
+            if (isInside(playerLocation, x1, y1, z1, x2, y2, z2)) {
                 Set<String> regions = RegionData.nowRegion.computeIfAbsent(player, k -> new HashSet<>());
                 if (regions.isEmpty()) {
                     messageModule.sendPlayerC(player, regionName + BaseMessage.INFO_ENTER_REGION.getMessage());

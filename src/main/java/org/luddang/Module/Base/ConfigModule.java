@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.luddang.Data.PlayerData;
 import org.luddang.Data.RegionData;
+import org.luddang.Data.TaskData;
 import org.luddang.Data.info.RegionInfo;
 import org.luddang.Luddang;
 import org.luddang.Message.BaseMessage;
@@ -58,6 +59,12 @@ public class ConfigModule {
     public void initialize() {
         reloadMoney();
         getRegion();
+    }
+
+    public void release() {
+        TaskData.release();
+        RegionData.release();
+        PlayerData.release();
     }
 
     public void addMoney(String uuid, Long value) {

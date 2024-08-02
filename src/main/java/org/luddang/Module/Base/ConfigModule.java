@@ -22,7 +22,7 @@ public class ConfigModule {
     private final String money = "money";
     private final String regionConfigYml = "region";
     private final String region = "region";
-
+    private final String extension = ".yml";
     public ConfigModule(Luddang plugin) {
         this.plugin = plugin;
         this.messageModule = new MessageModule(plugin);
@@ -68,32 +68,32 @@ public class ConfigModule {
     }
 
     public void addMoney(String uuid, Long value) {
-        FileConfiguration config = getConfig(moneyConfigYml + "/" + uuid + ".yml");
+        FileConfiguration config = getConfig(moneyConfigYml + "/" + uuid + extension);
         config.set(money, value);
-        saveConfig(config, moneyConfigYml + "/" + uuid + ".yml");
+        saveConfig(config, moneyConfigYml + "/" + uuid + extension);
     }
 
     public void reloadMoney() {
         File[] files = getFiles(moneyConfigYml);
         for (File playerYml : files) {
             FileConfiguration config = getConfig(playerYml);
-            UUID playerUUID = UUID.fromString(playerYml.getName().replace(".yml", ""));
+            UUID playerUUID = UUID.fromString(playerYml.getName().replace(extension, ""));
             long playerMoney = config.getLong(this.money, 0);
             PlayerData.playerInfo.put(playerUUID, playerMoney);
         }
     }
 
     public void addRegion(String regionName, List<Double> positions) {
-        FileConfiguration config = getConfig(regionConfigYml + "/" + regionName + ".yml");
+        FileConfiguration config = getConfig(regionConfigYml + "/" + regionName + extension);
         config.set(region, positions);
-        saveConfig(config, regionConfigYml + "/" + regionName + ".yml");
+        saveConfig(config, regionConfigYml + "/" + regionName + extension);
     }
 
     public void getRegion() {
         File[] files = getFiles(regionConfigYml);
         for (File regionYml : files) {
             FileConfiguration config = getConfig(regionYml);
-            String regionName = regionYml.getName().replace(".yml", "");
+            String regionName = regionYml.getName().replace(extension, "");
             List<Double> doubleList = config.getDoubleList(region);
             if (doubleList.size() < 5) {
                 messageModule.logInfo(BaseMessage.ERROR_CONFIG.getMessage());
@@ -114,7 +114,7 @@ public class ConfigModule {
     private File[] getFiles(String path) {
         File regionFolder = new File(plugin.getDataFolder(), path);
 
-        File[] files = regionFolder.listFiles((dir, name) -> name.endsWith(".yml"));
+        File[] files = regionFolder.listFiles((dir, name) -> name.endsWith(extension));
         if (files == null) {
             messageModule.logInfo(BaseMessage.ERROR_CONFIG.getMessage());
             return new File[0];

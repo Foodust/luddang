@@ -51,14 +51,15 @@ public class RegionModule {
             String regionName = entry.getKey();
             RegionInfo regionInfo = entry.getValue();
 
-            double x1 = Math.min(regionInfo.getX1(), regionInfo.getX2());
-            double y1 = Math.min(regionInfo.getY1(), regionInfo.getY2());
-            double z1 = Math.min(regionInfo.getZ1(), regionInfo.getZ2());
-            double x2 = Math.max(regionInfo.getX1(), regionInfo.getX2());
-            double y2 = Math.max(regionInfo.getY1(), regionInfo.getY2());
-            double z2 = Math.max(regionInfo.getZ1(), regionInfo.getZ2());
+            double minX = Math.min(regionInfo.getX1(), regionInfo.getX2());
+            double minY = Math.min(regionInfo.getY1(), regionInfo.getY2());
+            double minZ = Math.min(regionInfo.getZ1(), regionInfo.getZ2());
 
-            if (isInside(playerLocation, x1, y1, z1, x2, y2, z2)) {
+            double maxX = Math.max(regionInfo.getX1(), regionInfo.getX2());
+            double maxY = Math.max(regionInfo.getY1(), regionInfo.getY2());
+            double maxZ = Math.max(regionInfo.getZ1(), regionInfo.getZ2());
+
+            if (isInside(playerLocation, minX, minY, minZ, maxX, maxY, maxZ)) {
                 Set<String> regions = RegionData.nowRegion.computeIfAbsent(player, k -> new HashSet<>());
                 if (regions.isEmpty()) {
                     messageModule.sendPlayerC(player, regionName + BaseMessage.INFO_ENTER_REGION.getMessage());

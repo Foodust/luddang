@@ -13,8 +13,6 @@ import org.luddang.Message.BaseMessage;
 import org.luddang.Module.Base.ConfigModule;
 import org.luddang.Module.Base.MessageModule;
 
-import java.util.UUID;
-
 public class MoneyModule {
 
     private final Luddang plugin;
@@ -44,7 +42,7 @@ public class MoneyModule {
             messageModule.sendPlayerC(sender, BaseMessage.ERROR_VALUE_UNDER_INTEGER.getMessage());
             return;
         }
-        configModule.addMoney(player.getUniqueId().toString(), moneyValue);
+        configModule.addMoney(player.getName(), moneyValue);
         configModule.reloadMoney();
         sendMoney(player, moneyValue);
         messageModule.sendPlayerC(sender, BaseMessage.INFO_SET_MONEY.getMessage());
@@ -55,28 +53,33 @@ public class MoneyModule {
     }
 
     public void registerChannel(Player player) {
-        ((CraftPlayer) player).addChannel(BaseMessage.CHANNEL_NAME.getMessage());
+        CraftPlayer craftPlayer = (CraftPlayer) player;
+        craftPlayer.addChannel(BaseMessage.CHANNEL_NAME.getMessage());
     }
 
     public void sendMoney(Player player, Long money) {
-
         if (!isInChannel(player)) registerChannel(player);
-
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF(player.getUniqueId().toString());
+        out.writeUTF("money");
         out.writeUTF(player.getName());
         out.writeLong(money);
+
+        CraftPlayer craftPlayer = (CraftPlayer) player;
+
+        craftPlayer.sendPluginMessage(plugin, BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
+        craftPlayer.sendPluginMessage(plugin.getPlugin(), BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
         player.sendPluginMessage(plugin, BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
-        messageModule.logInfo(player.getName() + money);
+        player.sendPluginMessage(plugin.getPlugin(), BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
+        Bukkit.getServer().sendPluginMessage(plugin, BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
+        Bukkit.getServer().sendPluginMessage(plugin.getPlugin(), BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
     }
 
     public void isJoining(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        UUID playerUUID = player.getUniqueId();
+        String playerName = player.getName();
 
-
-        if (!PlayerData.playerInfo.containsKey(playerUUID)) return;
-        Long moneyValue = PlayerData.playerInfo.get(playerUUID);
+        if (!PlayerData.playerInfo.containsKey(playerName)) return;
+        Long moneyValue = PlayerData.playerInfo.get(playerName);
         sendMoney(player, moneyValue);
     }
 }

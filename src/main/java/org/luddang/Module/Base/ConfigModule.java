@@ -67,19 +67,19 @@ public class ConfigModule {
         PlayerData.release();
     }
 
-    public void addMoney(String uuid, Long value) {
-        FileConfiguration config = getConfig(moneyConfigYml + "/" + uuid + extension);
+    public void addMoney(String playerName, Long value) {
+        FileConfiguration config = getConfig(moneyConfigYml + "/" + playerName + extension);
         config.set(money, value);
-        saveConfig(config, moneyConfigYml + "/" + uuid + extension);
+        saveConfig(config, moneyConfigYml + "/" + playerName + extension);
     }
 
     public void reloadMoney() {
         File[] files = getFiles(moneyConfigYml);
         for (File playerYml : files) {
             FileConfiguration config = getConfig(playerYml);
-            UUID playerUUID = UUID.fromString(playerYml.getName().replace(extension, ""));
+            String playerName = playerYml.getName().replace(extension, "");
             long playerMoney = config.getLong(this.money, 0);
-            PlayerData.playerInfo.put(playerUUID, playerMoney);
+            PlayerData.playerInfo.put(playerName, playerMoney);
         }
     }
 

@@ -23,10 +23,10 @@ public class MoneyTimer extends TimerTask {
     @Override
     public void run() {
         Bukkit.broadcastMessage("돈이 전달됨");
-        for (Map.Entry<UUID, Long> entry : PlayerData.playerInfo.entrySet()) {
-            UUID playerUUID = entry.getKey();
+        for (Map.Entry<String, Long> entry : PlayerData.playerInfo.entrySet()) {
+            String playerName = entry.getKey();
             Long money = entry.getValue();
-            Player player = Bukkit.getPlayer(playerUUID);
+            Player player = Bukkit.getPlayerExact(playerName);
             if (player == null) continue;
             moneyModule.sendMoney(player, money);
             player.sendMessage("플레이어에게 돈이 전달됨");

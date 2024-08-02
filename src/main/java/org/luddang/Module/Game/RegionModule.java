@@ -61,7 +61,7 @@ public class RegionModule {
 
             if (isInside(playerLocation, minX, minY, minZ, maxX, maxY, maxZ)) {
                 Set<String> regions = RegionData.nowRegion.computeIfAbsent(player, k -> new HashSet<>());
-                if (regions.isEmpty()) {
+                if (regions.isEmpty() || !regions.contains(regionName)) {
                     messageModule.sendPlayerC(player, regionName + BaseMessage.INFO_ENTER_REGION.getMessage());
                 }
                 regions.add(regionName);

@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.luddang.Data.PlayerData;
@@ -49,15 +50,22 @@ public class MoneyModule {
         messageModule.sendPlayerC(sender, BaseMessage.INFO_SET_MONEY.getMessage());
     }
 
+    public Boolean isInChannel(Player player) {
+        return player.getListeningPluginChannels().contains(BaseMessage.CHANNEL_NAME.getMessage());
+    }
+
+    public void registerChannel(Player player) {
+        ((CraftPlayer) player).addChannel(BaseMessage.CHANNEL_NAME.getMessage());
+    }
+
     public void sendMoney(Player player, Long money) {
+
+        if (!isInChannel(player)) registerChannel(player);
 
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF(player.getUniqueId().toString());
         out.writeUTF(player.getName());
         out.writeLong(money);
-        messageModule.broadcastMessage(player.getListeningPluginChannels().toString());
-        messageModule.broadcastMessage(plugin.getPluginListener().getChannel().toString());
-
         player.sendPluginMessage(plugin, BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
         messageModule.logInfo(player.getName() + money);
     }

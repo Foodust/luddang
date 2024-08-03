@@ -64,14 +64,7 @@ public class MoneyModule {
         out.writeUTF(player.getName());
         out.writeLong(money);
 
-        CraftPlayer craftPlayer = (CraftPlayer) player;
-
-        craftPlayer.sendPluginMessage(plugin, BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
-        craftPlayer.sendPluginMessage(plugin.getPlugin(), BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
         player.sendPluginMessage(plugin, BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
-        player.sendPluginMessage(plugin.getPlugin(), BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
-        Bukkit.getServer().sendPluginMessage(plugin, BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
-        Bukkit.getServer().sendPluginMessage(plugin.getPlugin(), BaseMessage.CHANNEL_NAME.getMessage(), out.toByteArray());
     }
 
     public void isJoining(PlayerJoinEvent event) {
